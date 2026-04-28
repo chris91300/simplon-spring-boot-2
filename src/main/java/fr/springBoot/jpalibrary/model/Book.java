@@ -1,7 +1,9 @@
 package fr.springBoot.jpalibrary.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="book")
@@ -18,6 +20,23 @@ public class Book {
 
     @Column(columnDefinition = "Boolean Default true")
     private boolean available = true;
+
+    @ManyToOne
+    /*
+        si je veux passer par une table de jointure
+    @JoinTable( name="category_book",
+                joinColumns = @JoinColumn(name="book_id"),
+                inverseJoinColumns = @JoinColumn(name="category_id")
+    )*/
+    /*@JoinColumn(name="category_id")*/
+    private Category category;
+
+    @ManyToMany
+    @JoinTable( name="author_book",
+            joinColumns = @JoinColumn(name="book_id"),
+            inverseJoinColumns = @JoinColumn(name="author_id")
+    )
+    private List<Author> authors = new ArrayList<>();
 
     public Book(){};
 
@@ -57,6 +76,14 @@ public class Book {
         return this.available;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public List<Author> getAuthors() {
+        return authors;
+    }
+
     public void setId(Long id){
         this.id = id;
     }
@@ -71,5 +98,13 @@ public class Book {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

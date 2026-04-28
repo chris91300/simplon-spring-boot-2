@@ -1,0 +1,33 @@
+### GET request to example server
+
+###   récupérer tous les livres
+GET http://localhost:8080/books
+
+### récupérer un livre par son id
+GET http://localhost:8080/books/1
+
+
+### créer un livre
+POST http://localhost:8080/books
+Content-Type: application/json
+
+{
+    "title": "titre 1",
+    "description": "description 1"
+}
+### Il faudra créer avec linerunner .... des category et author
+
+GET http://localhost:8080/books/title/titre%201
+
+
+
+### PUT /books/{id}
+PUT localhost:8080/books/1
+Content-Type: application/json
+
+{
+  "description": "une super description modifiée."
+}
+
+### DELETE /books/{id}
+DELETE localhost:8080/books/1

@@ -2,9 +2,11 @@ package fr.springBoot.jpalibrary.controller;
 
 import fr.springBoot.jpalibrary.model.Book;
 import fr.springBoot.jpalibrary.service.ServiceBook;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tools.jackson.databind.util.JSONPObject;
 
 @RestController
 @RequestMapping("books")
@@ -20,24 +22,56 @@ public class ControllerBook {
 
     //GET /books/{id}
     @GetMapping("/{id}")
-    public Book getBook(@PathVariable("id") Long id){
-        return bookService.getBookById(id);
+    public ResponseEntity<@NonNull Object> getBook(@PathVariable("id") Long id){
+        try{
+            Book book = bookService.getBookById(id);
+            return new ResponseEntity<>(book, HttpStatus.OK);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Livre non trouvé.");
+        }
+
     }
 
     //POST /books
     @PostMapping()
-    public Book create(@RequestBody Book book){
-        return bookService.create(book);
+    public ResponseEntity<@NonNull Book> create(@RequestBody Book book){
+        Book bookCreated = bookService.create(book);
+        return new ResponseEntity<@NonNull Book>(bookCreated, HttpStatus.CREATED);
     }
+
     //PUT /books/{id}
     @PutMapping("/{id}")
-    public Book update(@PathVariable("id") Long id, @RequestBody Book book){
-        return bookService.updateBookWithId(id, book);
+    public ResponseEntity<@NonNull Object> update(@PathVariable("id") Long id, @RequestBody Book book){
+        try{
+            Book bookUpdated = bookService.updateBookWithId(id, book);
+            return new ResponseEntity<>(bookUpdated, HttpStatus.OK);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Livre non trouvé.");
+        }
+
     }
 
     //DELETE /books/{id}
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id){
-        bookService.delete(id);
+    public ResponseEntity<@NonNull Object> delete(@PathVariable("id") Long id){
+        try{
+            bookService.delete(id);
+            return ResponseEntity.ok().body("livre supprimé");
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Livre non trouvé");
+        }
+
+    }
+
+    // GET /books/title/{title}
+    @GetMapping("/title/{title}")
+    public ResponseEntity<@NonNull Object> findByTitle(@PathVariable("title") String title){
+        try{
+            Book book = bookService.findByTitle(title);
+            return new ResponseEntity<>(book, HttpStatus.OK);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Livre non trouvé.");
+        }
+
     }
 }
