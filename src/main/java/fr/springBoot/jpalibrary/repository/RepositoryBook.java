@@ -9,6 +9,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RepositoryBook extends JpaRepository<@NonNull Book,@NonNull  Long> {
 
-    /*@Query("SELECT b FROM Book b WHERE b.title = ?1")*/
+    /*
+        l'utilisation de @Query est possible mais pas sécurisé contre les injection SQL
+        @Query("SELECT b FROM Book b WHERE b.title = ?1")
+
+        JpaRepository est capable de générer tout seul les requêtes sql en fonction
+        du nom de la méthode
+    */
     public Book findByTitle(String title);
 }

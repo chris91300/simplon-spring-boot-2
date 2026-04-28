@@ -30,11 +30,11 @@ public class ServiceBook {
     public Book updateBookWithId(Long id, Book bookModified){
         Book currentBook = this.getBookById(id);
 
-        if(Objects.nonNull(bookModified.getTitle())){
+        if (Objects.nonNull(bookModified.getTitle())) {
             currentBook.setTitle(bookModified.getTitle());
         }
 
-        if(Objects.nonNull(bookModified.getDescription())){
+        if (Objects.nonNull(bookModified.getDescription()) ){
             currentBook.setDescription(bookModified.getDescription());
         }
 
@@ -46,12 +46,14 @@ public class ServiceBook {
     //DELETE /books/{id}
     public void delete(Long id){
 
-        bookRepository.findById(id).ifPresentOrElse(
+        bookRepository
+                .findById(id)
+                .ifPresentOrElse(
                 bookRepository::delete,
-                () -> {
-                    throw new EntityNotFoundException("Livre non trouvé");
-                }
-        );
+                    () -> {
+                        throw new EntityNotFoundException("Livre non trouvé");
+                    }
+                );
     }
 
     public Book findByTitle(String title){
