@@ -2,14 +2,11 @@ package fr.springBoot.jpalibrary.service;
 
 import fr.springBoot.jpalibrary.model.Book;
 import fr.springBoot.jpalibrary.repository.RepositoryBook;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.util.JSONPObject;
-
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class ServiceBook {
@@ -48,7 +45,17 @@ public class ServiceBook {
 
     //DELETE /books/{id}
     public void delete(Long id){
-        bookRepository.deleteById(id);
+
+        bookRepository.findById(id).ifPresentOrElse(
+                bookRepository::delete,
+                () -> {
+                    throw new EntityNotFoundException("Livre non trouvé");
+                }
+        );
+    }
+
+    public Book findByTitle(String title){
+        return bookRepository.findByTitle(title);
     }
 
 }
